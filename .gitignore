@@ -1,0 +1,7 @@
+*.png
+*.zip
+*.pt
+*.gz
+.DS_Store
+data/
+.idea
