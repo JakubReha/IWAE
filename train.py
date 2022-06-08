@@ -1,9 +1,7 @@
 from dataloaders import create_dataloaders
 import argparse
 import torch
-import matplotlib.pyplot as plt
 from torch.utils.tensorboard import SummaryWriter
-#from tensorboardX import SummaryWriter
 from tqdm import tqdm
 import torchvision
 from model import IWAE
@@ -36,7 +34,7 @@ if __name__ == '__main__':
 
     for e in tqdm(range(args.epochs)):
         train_loss = 0.0
-        model.train()  # Optional when not using Model Specific layer
+        model.train()
         for data, _ in dl_train:
             data = data.to(device)
             optimizer.zero_grad()
@@ -44,9 +42,6 @@ if __name__ == '__main__':
             target = dparams[-1]
             loss = model.compute_loss(data, dparams)[args.type]
             loss.backward()
-            for p in model.q1.parameters():
-                if not torch.isfinite(p.grad.abs().max()):
-                    print("boom")
             optimizer.step()
             train_loss += loss.item()/len(dl_train)
         writer.add_scalar('Loss/train', train_loss, e)
